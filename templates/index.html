@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In-Time Out-Time Calculator</title>
+</head>
+<body>
+    <h1>Calculate Total Time Spent</h1>
+    <form id="timeForm" method="post" action="/calculate">
+        <div id="timeEntries">
+            <div class="time-entry">
+                <label for="in_time_1">In Time (HH:MM:SS):</label>
+                <input type="time" id="in_time_1" name="time_entries" step="1" required>
+                <label for="out_time_1">Out Time (HH:MM:SS):</label>
+                <input type="time" id="out_time_1" name="time_entries" step="1" required>  
+            </div>
+        </div>
+        <button type="button" id="addEntry">Add Another Entry</button>
+        <br><br>
+        <button type="submit">Calculate</button>
+    </form>
+
+    <script>
+        let entryCount = 1;
+
+        document.getElementById('addEntry').addEventListener('click', () => {
+            entryCount++;
+
+            const timeEntriesDiv = document.getElementById('timeEntries');
+            const newEntry = document.createElement('div');
+            newEntry.classList.add('time-entry');
+
+            newEntry.innerHTML = `
+                <label for="in_time_${entryCount}">In Time (HH:MM:SS):</label>
+                <input type="time" id="in_time_${entryCount}" name="time_entries" step="1" required>
+                <label for="out_time_${entryCount}">Out Time (HH:MM:SS):</label>
+                <input type="time" id="out_time_${entryCount}" name="time_entries" step="1" required>
+            `;
+
+            timeEntriesDiv.appendChild(newEntry);
+        });
+
+        document.getElementById('timeForm').addEventListener('submit', (event) => {
+            const inputs = document.querySelectorAll('.time-entry input');
+            const formData = new FormData();
+
+            for (let i = 0; i < inputs.length; i += 2) {
+                const inTime = inputs[i].value;
+                const outTime = inputs[i + 1].value;
+                formData.append('time_entries', `${inTime},${outTime}`);
+            }
+
+            fetch('/calculate', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(`Error: ${data.error}`);
+                    } else {
+                        alert(`Total Time Spent: ${data.total_hours} hours, ${data.total_minutes} minutes, ${data.total_seconds} seconds`);
+                    }
+                })
+                .catch(error => {
+                    alert(`An error occurred: ${error}`);
+                });
+
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>
