@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>In-Time Out-Time Calculator</title>
+    <title>Entry</title>
 </head>
 <body>
-    <h1>Calculate Total Time Spent</h1>
+    <h1>Calculate </h1>
     <form id="timeForm" method="post" action="/calculate">
         <div id="timeEntries">
             <div class="time-entry">
-                <label for="in_time_1">In Time (HH:MM:SS):</label>
+                <label for="in_time_1">I (HH:MM:SS):</label>
                 <input type="time" id="in_time_1" name="time_entries" step="1" required>
-                <label for="out_time_1">Out Time (HH:MM:SS):</label>
+                <label for="out_time_1">O (HH:MM:SS):</label>
                 <input type="time" id="out_time_1" name="time_entries" step="1" required>  
             </div>
         </div>
@@ -32,9 +32,9 @@
             newEntry.classList.add('time-entry');
 
             newEntry.innerHTML = `
-                <label for="in_time_${entryCount}">In Time (HH:MM:SS):</label>
+                <label for="in_time_${entryCount}">I (HH:MM:SS):</label>
                 <input type="time" id="in_time_${entryCount}" name="time_entries" step="1" required>
-                <label for="out_time_${entryCount}">Out Time (HH:MM:SS):</label>
+                <label for="out_time_${entryCount}">O (HH:MM:SS):</label>
                 <input type="time" id="out_time_${entryCount}" name="time_entries" step="1" required>
             `;
 
@@ -60,7 +60,7 @@
                     if (data.error) {
                         alert(`Error: ${data.error}`);
                     } else {
-                        alert(`Total Time Spent: ${data.total_hours} hours, ${data.total_minutes} minutes, ${data.total_seconds} seconds`);
+                        alert(`Total: ${data.total_hours} hours, ${data.total_minutes} minutes, ${data.total_seconds} seconds`);
                     }
                 })
                 .catch(error => {
